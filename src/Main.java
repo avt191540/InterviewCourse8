@@ -1,5 +1,6 @@
 import javax.naming.NameNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -33,6 +34,14 @@ public class Main {
     }
 
     private static User findOldUserByStream(List<User> users) {
+        int sumAges = users.stream().map(User::getAge).reduce((s1,s2)->s1+s2).orElseThrow();
+        System.out.println(sumAges);
+        List<User> users1 = users.stream().distinct().collect(Collectors.toList());
+        sumAges = users1.stream().map((s)->s.getAge()).reduce((s1,s2)->s1+s2).orElseThrow();
+        System.out.println(sumAges);
+        int sumAges1 = users.stream().mapToInt((s)->s.getAge()).sum();
+        System.out.println(sumAges1);
+
         return users.stream().distinct().sorted(Comparator.comparing(User::getAge).thenComparing(User::getName))
                 .skip(users.size() - 2).findFirst().orElseThrow();
     }
